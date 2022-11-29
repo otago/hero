@@ -5,8 +5,8 @@
             <% include OP/Hero/Model/HeroItem %>
         <% end_loop %>
     </div>
-    <div class="op__hero-controls">
-        <button class="op__hero--controls-previous">Previous</button>
-        <button class="op__hero--controls-next">Next</button>
+    <div class="op__hero--controls">
+        <button class="op__hero--controls-previous"><span>Previous</span></button>
+        <button class="op__hero--controls-next"><span>Next</span></button>
     </div>
 </div>

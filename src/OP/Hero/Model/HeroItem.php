@@ -53,4 +53,13 @@ class HeroItem extends DataObject
 
         return $fields;
     }
+
+    public function getSummary()
+    {
+        if ($this->Introduction && strlen($this->Introduction) > 150) {
+            $substring = substr($this->Introduction, 0, 150);
+            return "$substring...";
+        }
+        return $this->Introduction;
+    }
 }
