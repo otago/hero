@@ -1,3 +1,4 @@
+<% require javascript("otago/hero:client/dist/js/bundle.js") %>
 <div class="op__hero">
     <div class="op__hero--items">
         <% loop $Items %>
