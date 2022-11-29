@@ -36,41 +36,49 @@ export default () => {
   buttonNext.addEventListener('click', () => goNext());
 
   // Dragging
+  let lastCoords = null;
+
   const getOffsetCoords = (coords) => [
     startingCoords[0] - coords[0],
     startingCoords[1] - coords[1]
   ];
 
-  heroItemContainer.addEventListener('mousedown', (e) => {
-    e.preventDefault();
-    startingCoords = [
+  const getCoords = (e) => {
+    if (e.touches && e.touches.length) {
+      return [
+        e.touches[0].clientX,
+        e.touches[0].clientY
+      ];
+    }
+    return [
       e.clientX,
       e.clientY
     ];
+  };
+
+  const handleDown = (e) => {
+    e.preventDefault();
+    startingCoords = getCoords(e);
     heroItemContainer.classList.add('dragging');
     mouseDown = true;
-  });
+  };
 
-  heroItemContainer.addEventListener('mousemove', (e) => {
+  const handleMove = (e) => {
     if (mouseDown) {
       e.preventDefault();
-      const coords = getOffsetCoords([
-        e.clientX,
-        e.clientY
-      ]);
+      lastCoords = getCoords(e);
+      const coords = getOffsetCoords(getCoords(e));
       moveToPosition(currentPosition, coords[0]);
     }
-  });
+  };
 
-  heroItemContainer.addEventListener('mouseup', (e) => {
+  const handleUp = (e) => {
     e.preventDefault();
     heroItemContainer.classList.remove('dragging');
     mouseDown = false;
-    const coords = getOffsetCoords([
-      e.clientX,
-      e.clientY
-    ]);
-
+    const coords = (e.touches && !e.touches.length) ?
+      getOffsetCoords(lastCoords) :
+      getOffsetCoords(getCoords(e));
     if (Math.abs(coords[0]) > swipeThreshold) {
       if (coords[0] > 0) {
         goNext();
@@ -80,5 +88,14 @@ export default () => {
     } else {
       goSame();
     }
-  });
+  };
+
+  heroItemContainer.addEventListener('mousedown', (e) => handleDown(e));
+  heroItemContainer.addEventListener('touchstart', (e) => handleDown(e));
+
+  heroItemContainer.addEventListener('mousemove', (e) => handleMove(e));
+  heroItemContainer.addEventListener('touchmove', (e) => handleMove(e));
+
+  heroItemContainer.addEventListener('mouseup', (e) => handleUp(e));
+  heroItemContainer.addEventListener('touchend', (e) => handleUp(e));
 };

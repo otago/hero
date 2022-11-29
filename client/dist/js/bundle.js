@@ -145,31 +145,40 @@ exports.default = function () {
     return goNext();
   });
 
+  var lastCoords = null;
+
   var getOffsetCoords = function getOffsetCoords(coords) {
     return [startingCoords[0] - coords[0], startingCoords[1] - coords[1]];
   };
 
-  heroItemContainer.addEventListener('mousedown', function (e) {
+  var getCoords = function getCoords(e) {
+    if (e.touches && e.touches.length) {
+      return [e.touches[0].clientX, e.touches[0].clientY];
+    }
+    return [e.clientX, e.clientY];
+  };
+
+  var handleDown = function handleDown(e) {
     e.preventDefault();
-    startingCoords = [e.clientX, e.clientY];
+    startingCoords = getCoords(e);
     heroItemContainer.classList.add('dragging');
     mouseDown = true;
-  });
+  };
 
-  heroItemContainer.addEventListener('mousemove', function (e) {
+  var handleMove = function handleMove(e) {
     if (mouseDown) {
       e.preventDefault();
-      var coords = getOffsetCoords([e.clientX, e.clientY]);
+      lastCoords = getCoords(e);
+      var coords = getOffsetCoords(getCoords(e));
       moveToPosition(currentPosition, coords[0]);
     }
-  });
+  };
 
-  heroItemContainer.addEventListener('mouseup', function (e) {
+  var handleUp = function handleUp(e) {
     e.preventDefault();
     heroItemContainer.classList.remove('dragging');
     mouseDown = false;
-    var coords = getOffsetCoords([e.clientX, e.clientY]);
-
+    var coords = e.touches && !e.touches.length ? getOffsetCoords(lastCoords) : getOffsetCoords(getCoords(e));
     if (Math.abs(coords[0]) > swipeThreshold) {
       if (coords[0] > 0) {
         goNext();
@@ -179,6 +188,27 @@ exports.default = function () {
     } else {
       goSame();
     }
+  };
+
+  heroItemContainer.addEventListener('mousedown', function (e) {
+    return handleDown(e);
+  });
+  heroItemContainer.addEventListener('touchstart', function (e) {
+    return handleDown(e);
+  });
+
+  heroItemContainer.addEventListener('mousemove', function (e) {
+    return handleMove(e);
+  });
+  heroItemContainer.addEventListener('touchmove', function (e) {
+    return handleMove(e);
+  });
+
+  heroItemContainer.addEventListener('mouseup', function (e) {
+    return handleUp(e);
+  });
+  heroItemContainer.addEventListener('touchend', function (e) {
+    return handleUp(e);
   });
 };
 
