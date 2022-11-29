@@ -28,13 +28,15 @@ class Hero extends DataObject
     public function getCMSFields()
     {
         $fields = parent::getCMSFields();
-
         $items = $fields->fieldByName("Root.Items.Items");
-
         if ($items) {
             ($items->getConfig())->addComponent(new GridFieldOrderableRows());
         }
-
         return $fields;
+    }
+
+    public function getSlides()
+    {
+        return $this->Items;
     }
 }

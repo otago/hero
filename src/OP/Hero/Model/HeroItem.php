@@ -54,12 +54,17 @@ class HeroItem extends DataObject
         return $fields;
     }
 
-    public function getSummary()
+    public static function Summarise($summary)
     {
-        if ($this->Introduction && strlen($this->Introduction) > 150) {
-            $substring = substr($this->Introduction, 0, 150);
+        if ($summary && strlen($summary) > 150) {
+            $substring = substr($summary, 0, 150);
             return "$substring...";
         }
-        return $this->Introduction;
+        return $summary;
+    }
+
+    public function getSummary()
+    {
+        return self::Summarise($this->Introduction);
     }
 }
