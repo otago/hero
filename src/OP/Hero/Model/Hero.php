@@ -3,6 +3,7 @@
 namespace OP\Hero\Model;
 
 use SilverStripe\ORM\DataObject;
+use Symbiote\GridFieldExtensions\GridFieldOrderableRows;
 
 class Hero extends DataObject
 {
@@ -28,14 +29,11 @@ class Hero extends DataObject
     {
         $fields = parent::getCMSFields();
 
-        echo '<Pre>'; var_dump("Add the sort functionality"); die();
+        $items = $fields->fieldByName("Root.Items.Items");
 
-        // $fields->addFieldsToTab(
-        //     'Root.Main',
-        //     [
-        //         // $fields->fieldByName("Root.Items.Items")
-        //     ]
-        // );
+        if ($items) {
+            ($items->getConfig())->addComponent(new GridFieldOrderableRows());
+        }
 
         return $fields;
     }

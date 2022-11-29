@@ -2,6 +2,7 @@
 
 namespace OP\Hero\Model;
 
+use gorriecoe\Link\Models\Link;
 use gorriecoe\LinkField\LinkField;
 use SilverStripe\Assets\Image;
 use SilverStripe\ORM\DataObject;
@@ -25,6 +26,8 @@ class HeroItem extends DataObject
     private static $owns = [
         'Image'
     ];
+
+    private static $default_sort = 'Sort';
 
     public function getCMSFields()
     {
