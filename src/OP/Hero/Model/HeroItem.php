@@ -50,7 +50,7 @@ class HeroItem extends DataObject
         $fields->removeByName([
             'Sort',
             'LinkToID',
-            'HeroID'
+            'Heros'
         ]);
 
         $fields->addFieldsToTab(

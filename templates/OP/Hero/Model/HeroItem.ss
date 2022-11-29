@@ -1,6 +1,6 @@
 <div class="op__hero--item">
     <img src="$Image.URL" alt="$Image.Title" />
-    <div class="op__hero--item-content">
+    <div class="op__hero--item-content<% if $Subtitle %> has-subtitle<% end_if %>">
         <h1>
             <% if $LinkTo %>
                 <% with $LinkTo %>
