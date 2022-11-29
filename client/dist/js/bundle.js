@@ -101,8 +101,11 @@ exports.default = function () {
   var buttonNext = document.getElementsByClassName('op__hero--controls-next')[0];
   var heroItemContainer = document.getElementsByClassName('op__hero--items')[0];
   var heroItemCount = heroItemContainer.children.length;
+  var swipeThreshold = 100;
 
+  var mouseDown = false;
   var currentPosition = 0;
+  var startingCoords = [0, 0];
 
   var getUpdatedCurrentPosition = function getUpdatedCurrentPosition(desiredPosition) {
     if (desiredPosition < 0) {
@@ -112,17 +115,70 @@ exports.default = function () {
     }
     return currentPosition;
   };
-
+  var getPositionPercentage = function getPositionPercentage(position) {
+    return '-' + position * 100 + '%';
+  };
   var moveToPosition = function moveToPosition(newPosition) {
-    heroItemContainer.style.left = '-' + newPosition * 100 + '%';
+    var offset = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
+
+    if (offset !== 0) {
+      heroItemContainer.style.left = 'calc(' + getPositionPercentage(newPosition) + ' - ' + offset + 'px)';
+    } else {
+      heroItemContainer.style.left = getPositionPercentage(newPosition);
+    }
+  };
+
+  var goSame = function goSame() {
+    return moveToPosition(getUpdatedCurrentPosition(currentPosition));
+  };
+  var goPrevious = function goPrevious() {
+    return moveToPosition(getUpdatedCurrentPosition(currentPosition - 1));
+  };
+  var goNext = function goNext() {
+    return moveToPosition(getUpdatedCurrentPosition(currentPosition + 1));
   };
 
   buttonPrevious.addEventListener('click', function () {
-    moveToPosition(getUpdatedCurrentPosition(currentPosition - 1));
+    return goPrevious();
+  });
+  buttonNext.addEventListener('click', function () {
+    return goNext();
   });
 
-  buttonNext.addEventListener('click', function () {
-    moveToPosition(getUpdatedCurrentPosition(currentPosition + 1));
+  var getOffsetCoords = function getOffsetCoords(coords) {
+    return [startingCoords[0] - coords[0], startingCoords[1] - coords[1]];
+  };
+
+  heroItemContainer.addEventListener('mousedown', function (e) {
+    e.preventDefault();
+    startingCoords = [e.clientX, e.clientY];
+    heroItemContainer.classList.add('dragging');
+    mouseDown = true;
+  });
+
+  heroItemContainer.addEventListener('mousemove', function (e) {
+    if (mouseDown) {
+      e.preventDefault();
+      var coords = getOffsetCoords([e.clientX, e.clientY]);
+      moveToPosition(currentPosition, coords[0]);
+    }
+  });
+
+  heroItemContainer.addEventListener('mouseup', function (e) {
+    e.preventDefault();
+    heroItemContainer.classList.remove('dragging');
+    mouseDown = false;
+    var coords = getOffsetCoords([e.clientX, e.clientY]);
+
+    if (Math.abs(coords[0]) > swipeThreshold) {
+      if (coords[0] > 0) {
+        goNext();
+      } else {
+        goPrevious();
+      }
+    } else {
+      goSame();
+    }
   });
 };
 

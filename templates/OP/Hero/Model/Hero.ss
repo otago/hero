@@ -1,6 +1,6 @@
 <% require javascript("otago/hero:client/dist/js/bundle.js") %>
 <div class="op__hero">
-    <div class="op__hero--items">
+    <div class="op__hero--items" style="left: 0%;">
         <% loop $Items %>
             <% include OP/Hero/Model/HeroItem %>
         <% end_loop %>
