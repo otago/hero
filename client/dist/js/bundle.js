@@ -159,7 +159,9 @@ exports.default = function () {
   };
 
   var handleDown = function handleDown(e) {
-    e.preventDefault();
+    if (!e.touches) {
+      e.preventDefault();
+    }
     startingCoords = getCoords(e);
     heroItemContainer.classList.add('dragging');
     mouseDown = true;
@@ -167,7 +169,9 @@ exports.default = function () {
 
   var handleMove = function handleMove(e) {
     if (mouseDown) {
-      e.preventDefault();
+      if (!e.touches) {
+        e.preventDefault();
+      }
       lastCoords = getCoords(e);
       var coords = getOffsetCoords(getCoords(e));
       moveToPosition(currentPosition, coords[0]);
@@ -175,7 +179,9 @@ exports.default = function () {
   };
 
   var handleUp = function handleUp(e) {
-    e.preventDefault();
+    if (!e.touches) {
+      e.preventDefault();
+    }
     heroItemContainer.classList.remove('dragging');
     mouseDown = false;
     var coords = e.touches && !e.touches.length ? getOffsetCoords(lastCoords) : getOffsetCoords(getCoords(e));
