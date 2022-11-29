@@ -13,14 +13,17 @@ class HeroItem extends DataObject
 
     private static $db = [
         'Title' => 'Varchar(255)',
-        'Introduction' => 'Text',
-        'Sort' => 'Int'
+        'Subtitle' => 'Varchar(255)',
+        'Introduction' => 'Text'
     ];
 
     private static $has_one = [
-        'Hero' => Hero::class,
         'Image' => Image::class,
         'LinkTo' => Link::class
+    ];
+
+    private static $belongs_many_many = [
+        'Heros' => Hero::class,
     ];
 
     private static $owns = [
@@ -32,7 +35,13 @@ class HeroItem extends DataObject
         'LinkTo',
     ];
 
-    private static $default_sort = 'Sort';
+    private static $summary_fields = [
+        'ID' => 'ID',
+        'Title' => 'Title',
+        'Subtitle' => 'Subtitle',
+        'Created' => 'Created',
+        'LastEdited' => 'Last Edited',
+    ];
 
     public function getCMSFields()
     {

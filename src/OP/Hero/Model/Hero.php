@@ -13,8 +13,14 @@ class Hero extends DataObject
         'Title' => 'Varchar(255)'
     ];
 
-    private static $has_many = [
+    private static $many_many = [
         'Items' => HeroItem::class
+    ];
+
+    private static $many_many_extraFields = [
+        'Items' => [
+            'Sort' => 'Int'
+        ]
     ];
 
     private static $owns = [
@@ -23,6 +29,13 @@ class Hero extends DataObject
 
     private static $cascade_deletes = [
         'Items',
+    ];
+
+    private static $summary_fields = [
+        'ID' => 'ID',
+        'Title' => 'Title',
+        'Created' => 'Created',
+        'LastEdited' => 'Last Edited',
     ];
 
     public function getCMSFields()
@@ -37,6 +50,6 @@ class Hero extends DataObject
 
     public function getSlides()
     {
-        return $this->Items;
+        return $this->Items->sort("Sort");
     }
 }

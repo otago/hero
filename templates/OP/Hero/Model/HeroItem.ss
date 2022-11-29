@@ -10,6 +10,9 @@
                 $Title
             <% end_if %>
         </h1>
+        <% if $Subtitle %>
+            <h2>$Subtitle</h2>
+        <% end_if %>
         <p><span>$Summary</span>$LinkTo</p>
     </div>
 </div>
