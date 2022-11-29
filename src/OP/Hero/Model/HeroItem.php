@@ -24,7 +24,12 @@ class HeroItem extends DataObject
     ];
 
     private static $owns = [
-        'Image'
+        'Image',
+        'LinkTo'
+    ];
+
+    private static $cascade_deletes = [
+        'LinkTo',
     ];
 
     private static $default_sort = 'Sort';
