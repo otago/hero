@@ -1,4 +1,4 @@
-<div class="op__hero-item">
+<div class="op__hero--item">
     $Image
     <h1>$Title</h1>
     <p>$Introduction</p>

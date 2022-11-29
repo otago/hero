@@ -38,6 +38,12 @@ class HeroItem extends DataObject
     {
         $fields = parent::getCMSFields();
 
+        $fields->removeByName([
+            'Sort',
+            'LinkToID',
+            'HeroID'
+        ]);
+
         $fields->addFieldsToTab(
             'Root.Main',
             [
