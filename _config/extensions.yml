@@ -1,0 +1,7 @@
+gorriecoe\Link\Models\Link:
+  extensions:
+    - OP\Header\Extensions\Link
+
+Page:
+  extensions:
+    - OP\Header\Extensions\Page
