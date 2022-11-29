@@ -4,17 +4,19 @@ export default () => {
   const heroItemContainer = document.getElementsByClassName('op__hero--items')[0];
   const heroItemCount = heroItemContainer.children.length;
   const swipeThreshold = 100;
+  const autoScrollDelay = 4000;
 
   let mouseDown = false;
   let currentPosition = 0;
   let startingCoords = [0, 0];
+  let userHasInteractedWithTheSlider = false;
 
   // Slides
   const getUpdatedCurrentPosition = (desiredPosition) => {
     if (desiredPosition < 0) {
       currentPosition = 0;
     } else {
-      currentPosition = desiredPosition < heroItemCount ? desiredPosition : heroItemCount - 1;
+      currentPosition = desiredPosition < heroItemCount ? desiredPosition : 0;
     }
     return currentPosition;
   };
@@ -29,8 +31,16 @@ export default () => {
 
   // Controls
   const goSame = () => moveToPosition(getUpdatedCurrentPosition((currentPosition)));
-  const goPrevious = () => moveToPosition(getUpdatedCurrentPosition((currentPosition - 1)));
-  const goNext = () => moveToPosition(getUpdatedCurrentPosition((currentPosition + 1)));
+  const goPrevious = () => {
+    userHasInteractedWithTheSlider = true;
+    moveToPosition(getUpdatedCurrentPosition((currentPosition - 1)));
+  };
+  const goNext = (auto = false) => {
+    if (!auto) {
+      userHasInteractedWithTheSlider = true;
+    }
+    moveToPosition(getUpdatedCurrentPosition((currentPosition + 1)));
+  };
 
   buttonPrevious.addEventListener('click', () => goPrevious());
   buttonNext.addEventListener('click', () => goNext());
@@ -104,4 +114,15 @@ export default () => {
 
   heroItemContainer.addEventListener('mouseup', (e) => handleUp(e));
   heroItemContainer.addEventListener('touchend', (e) => handleUp(e));
+
+  const scheduleNextSlide = () => {
+    setTimeout(() => {
+      if (!userHasInteractedWithTheSlider) {
+        goNext(true);
+        scheduleNextSlide();
+      }
+    }, autoScrollDelay);
+  };
+
+  scheduleNextSlide();
 };
