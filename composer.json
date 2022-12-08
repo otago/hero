@@ -12,7 +12,8 @@
         "silverstripe/admin": "^1.0",
         "gorriecoe/silverstripe-linkfield": "^1.0",
         "gorriecoe/silverstripe-link": "^1.4",
-        "symbiote/silverstripe-gridfieldextensions": "^3.5"
+        "symbiote/silverstripe-gridfieldextensions": "^3.5",
+        "otago/tepukenga-header": "^1.0"
     },
     "autoload": {
         "psr-4": {
